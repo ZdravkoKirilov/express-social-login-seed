@@ -6,11 +6,15 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var config = require('./config.json');
+var flash = require('connect-flash');
+var passport = require('passport');
 
 var index = require('./routes/index');
 var login = require('./routes/login');
 
 var app = express();
+
+require('./passport/local');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -24,8 +28,13 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(session({secret: config.EXPRESS_SESSION_SECRET}));
 
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
+
 app.use(express.static(path.join(__dirname, 'public')));
 
+require('./routes/auth')(app, passport);
 app.use('/', index);
 app.use('/login', login);
 

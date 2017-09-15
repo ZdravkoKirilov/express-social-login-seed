@@ -20,10 +20,12 @@
     "passport-facebook": "^2.1.1",
     "passport-google-oauth": "^1.0.0",
     "passport-local": "^1.0.0",
+    "sequelize": "^4.8.3",
     "serve-favicon": "~2.4.2",
     "sqlite3": "^3.1.11"
   },
   "devDependencies": {
-    "nodemon": "^1.12.0"
+    "nodemon": "^1.12.0",
+    "sequelize-cli": "^3.0.0-2"
   }
 }
