@@ -9,8 +9,11 @@ module.exports = function (passport) {
 
 	passport.deserializeUser(function (id, done) {
 		User.findById(id)
-		.then(function (err, user) {
-			done(err, user);
+		.then(function (user) {
+			done(null, user.dataValues);
+		})
+		.catch(err => {
+			done(err);
 		});
 	});
 
@@ -25,9 +28,9 @@ module.exports = function (passport) {
 				if (user) {
 					return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
 				} else {
-					User.create({email: 'testEmail', password: 'testPassword'})
-					.then(function (newUser) {
-						done(null, newUser);
+					User.create({email, password})
+					.then(function (response) {
+						done(null, response.dataValues);
 					})
 					.catch(function (err) {
 						throw(err);
@@ -40,11 +43,3 @@ module.exports = function (passport) {
 		});
 	}));
 };
-
-// User.create({email: 'testEmail', password: 'testPassword'})
-// .then(function (response) {
-// 	console.log(response);
-// })
-// .catch(function (err) {
-// 	console.log(err);
-// });

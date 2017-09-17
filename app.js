@@ -1,19 +1,20 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var session = require('express-session');
-var config = require('./config.json');
-var flash = require('connect-flash');
-var passport = require('passport');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const session = require('express-session');
+const config = require('./config.json');
+const flash = require('connect-flash');
+const passport = require('passport');
 
-var index = require('./routes/index');
-var login = require('./routes/login');
-var signup = require('./routes/signup');
+const index = require('./routes/index');
+const login = require('./routes/login');
+const signup = require('./routes/signup');
+const profile = require('./routes/profile');
 
-var app = express();
+const app = express();
 
 require('./passport/local');
 
@@ -38,13 +39,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/login', login);
 app.use('/signup', signup);
+app.use('/profile', profile);
 
 require('./passport/index')(passport);
 require('./routes/auth')(app, passport);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-	var err = new Error('Not Found');
+	const err = new Error('Not Found');
 	err.status = 404;
 	next(err);
 });
