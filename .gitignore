@@ -4,3 +4,7 @@ npm-debug.log*
 /config.json
 /sqlite_data/
 /data/core.sqlite
+.idea/inspectionProfiles/
+.idea/watcherTasks.xml
+public/images/
+public/javascripts/
