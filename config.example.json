@@ -1,5 +1,6 @@
 {
     "EXPRESS_SESSION_SECRET": "IT IS A SECRET",
     "PORT": 8080,
-    "SQLITE_USERS_DB_PATH": "data/core.sqlite"
+    "SQLITE_USERS_DB_PATH": "data/core.sqlite",
+    "TOKEN_SECRET": "IT IS A SECRET"
 }

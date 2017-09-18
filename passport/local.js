@@ -42,4 +42,23 @@ module.exports = function (passport) {
 			});
 		});
 	}));
+
+	passport.use('local-login', new LocalStrategy({
+		usernameField: 'email',
+		passwordField: 'password',
+		passReqToCallback: true
+	}, function (req, email, password, done) {
+		process.nextTick(function () {
+			User.findOne({where: {email: email}})
+			.then(function (user) {
+				if (user) {
+					return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+				} else {
+				}
+			})
+			.catch(function (err) {
+				done(err);
+			});
+		});
+	}));
 };
