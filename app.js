@@ -16,7 +16,7 @@ const profile = require('./routes/profile');
 
 const app = express();
 
-require('./passport/local');
+// require('./passport/local');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -41,7 +41,8 @@ app.use('/login', login);
 app.use('/signup', signup);
 app.use('/profile', profile);
 
-require('./passport/index')(passport);
+// require('./passport/index')(passport);
+require('./passport/strategies')(passport);
 require('./routes/auth')(app, passport);
 
 // catch 404 and forward to error handler
