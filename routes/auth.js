@@ -4,7 +4,7 @@ const url = require('url');
 module.exports = function (app, passport) {
 
 	app.get('/auth/facebook', (req, res, next) => {
-		const returnUrl = req.query.returnUrl || getReturnUrl('returnUrl=', req.headers.referer);
+		const returnUrl = req.query.returnUrl || getReturnUrl('returnUrl=', req.headers.referer) || '/profile';
 		passport.authenticate('facebook', {
 			session: false,
 			callbackURL: 'http://localhost:8080/auth/facebook/callback?returnUrl=' + returnUrl,
@@ -24,7 +24,7 @@ module.exports = function (app, passport) {
 	});
 
 	app.get('/auth/google', (req, res, next) => {
-		const returnUrl = req.query.returnUrl || getReturnUrl('returnUrl=', req.headers.referer);
+		const returnUrl = req.query.returnUrl || getReturnUrl('returnUrl=', req.headers.referer) || '/profile';
 		req.session.returnUrl = returnUrl;
 		const callbackURL = 'http://localhost:8080/auth/google/callback';
 		debugger;
@@ -49,7 +49,7 @@ module.exports = function (app, passport) {
 	});
 
 	app.post('/login', (req, res, next) => {
-		const returnUrl = req.query.returnUrl;
+		const returnUrl = req.query.returnUrl || getReturnUrl('returnUrl=', req.headers.referer) || '/profile';
 		passport.authenticate('local-login', {}, function (token) {
 			// redirect back to front end with the token as url param
 			debugger;
@@ -57,7 +57,7 @@ module.exports = function (app, passport) {
 	});
 
 	app.post('/signup', async (req, res, next) => {
-		const returnUrl = req.query.returnUrl || getReturnUrl('returnUrl=', req.headers.referer);
+		const returnUrl = req.query.returnUrl || getReturnUrl('returnUrl=', req.headers.referer) || '/profile';
 		const {email, password} = req.body;
 
 		try {
