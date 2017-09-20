@@ -13,9 +13,16 @@
 <div class="container">
     <div class="jumbotron text-center">
         <h1>Login with: </h1>
-        <a href="/login" class="btn btn-default"><span class="fa fa-user"></span> Local Login</a>
+        <a href="/login?returnUrl=/profile" class="btn btn-default"><span class="fa fa-user"></span> Local Login</a>
+
+        <div>
+            <h2>Or use social login</h2>
+            <a href="/auth/google?returnUrl=/profile" class="btn btn-danger"><span class="fa fa-google-plus"></span> Sign in with Google</a>
+            <a href="/auth/facebook?returnUrl=/profile" class="btn btn-primary"><span class="fa fa-facebook"></span> Sign in with Facebook</a>
+        </div>
+
         <h1>Signup with: </h1>
-        <a href="/signup" class="btn btn-default"><span class="fa fa-user"></span> Local Signup</a>
+        <a href="/signup?returnUrl=/profile" class="btn btn-default"><span class="fa fa-user"></span> Local Signup</a>
     </div>
 
 </div>

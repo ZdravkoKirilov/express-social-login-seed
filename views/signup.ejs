@@ -29,6 +29,10 @@
             <button type="submit" class="btn btn-warning btn-lg">Signup</button>
         </form>
 
+        <% if (message.length > 0) { %>
+        <div class="alert alert-danger"><%= message %></div>
+        <% } %>
+
         <hr>
 
         <p>Or go <a href="/">home</a>.</p>
