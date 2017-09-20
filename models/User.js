@@ -14,15 +14,16 @@ const sequelize = new Sequelize('core', 'username', 'password', {
 sequelize
 .authenticate()
 .then(function () {
-	console.log('Connection has been established successfully.');
+	console.log('SQLite connection has been established successfully.');
 })
 .catch(function (err) {
-	console.error('Unable to connect to the database:', err);
+	console.error('Unable to connect to the SQLite database:', err);
 });
 
 const User = sequelize.define('User', {
 	email: Sequelize.STRING,
-	password: Sequelize.STRING
+	password: Sequelize.STRING,
+	provider: Sequelize.STRING
 }, {
 	tableName: 'Users'
 });

@@ -5,86 +5,68 @@ module.exports = function (app, passport) {
 
 	app.get('/auth/facebook', (req, res, next) => {
 		const returnUrl = req.query.returnUrl || getReturnUrl('returnUrl=', req.headers.referer) || '/profile';
-		passport.authenticate('facebook', {
-			session: false,
-			callbackURL: 'http://localhost:8080/auth/facebook/callback?returnUrl=' + returnUrl,
-			scope: ['email']
-		})(req, res, next);
+		req.session.returnUrl = returnUrl;
+		passport.authenticate('facebook', {})(req, res, next);
 	});
 
 	app.get('/auth/facebook/callback', (req, res, next) => {
-		const returnUrl = req.query.returnUrl;
+		const returnUrl = req.session.returnUrl;
 		passport.authenticate('facebook', {
-			callbackURL: 'http://localhost:8080/auth/facebook/callback?returnUrl=' + returnUrl,
 			failureRedirect: '/'
 		}, function (token) {
-			// redirect back to front end with the token as url param
-			debugger;
+			res.redirect(url.format({
+				pathname: decodeURI(returnUrl),
+				query: {
+					token
+				}
+			}));
 		})(req, res, next);
 	});
 
 	app.get('/auth/google', (req, res, next) => {
 		const returnUrl = req.query.returnUrl || getReturnUrl('returnUrl=', req.headers.referer) || '/profile';
 		req.session.returnUrl = returnUrl;
-		const callbackURL = 'http://localhost:8080/auth/google/callback';
-		debugger;
-		passport.authenticate('google', {
-			session: false,
-			callbackURL,
-			scope: ['profile', 'email']
-		})(req, res, next);
+		passport.authenticate('google', {})(req, res, next);
 	});
 
 	app.get('/auth/google/callback', (req, res, next) => {
 		const returnUrl = req.session.returnUrl;
-		const callbackURL = 'http://localhost:8080/auth/google/callback';
-		debugger;
 		passport.authenticate('google', {
-			callbackURL,
-			failureRedirect: '/'
+			failureRedirect: '/login?returnUrl=' + returnUrl
 		}, function (token) {
-			// redirect back to front end with the token as url param
-			debugger;
+			res.redirect(url.format({
+				pathname: decodeURI(returnUrl),
+				query: {
+					token
+				}
+			}));
 		})(req, res, next);
 	});
 
 	app.post('/login', (req, res, next) => {
 		const returnUrl = req.query.returnUrl || getReturnUrl('returnUrl=', req.headers.referer) || '/profile';
 		passport.authenticate('local-login', {}, function (token) {
-			// redirect back to front end with the token as url param
-			debugger;
+			res.redirect(url.format({
+				pathname: decodeURI(returnUrl),
+				query: {
+					token
+				}
+			}));
 		})(req, res, next);
 	});
 
 	app.post('/signup', async (req, res, next) => {
 		const returnUrl = req.query.returnUrl || getReturnUrl('returnUrl=', req.headers.referer) || '/profile';
-		const {email, password} = req.body;
-
-		try {
-			const result = await User.findOrCreate({
-				where: {
-					email
-				},
-				defaults: {
-					email, password
-				}
-			});
-			const user = result[0].dataValues;
-			const isNew = result[1];
-			if (isNew) {
+		passport.authenticate('local-signup', {}, function (newUser) {
+			if (newUser) {
 				res.redirect(url.format({
 					pathname: '/login',
 					query: {
 						returnUrl
 					}
 				}));
-			} else {
-				// should redirect to /login instead
-				res.status(401).json({message: 'User already exists'});
 			}
-		} catch (err) {
-			res.status(500).send('Internal server error');
-		}
+		})(req, res, next);
 	});
 
 	function getReturnUrl(paramName, returnUrl = '') {

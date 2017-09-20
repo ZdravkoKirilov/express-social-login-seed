@@ -17,7 +17,11 @@ module.exports = {
 			},
 			password: {
 				type: Sequelize.STRING
+			},
+			provider: {
+				type: Sequelize.STRING
 			}
+
 		})
 	},
 	down: function (queryInterface, Sequelize) {
